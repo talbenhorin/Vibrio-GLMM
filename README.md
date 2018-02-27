@@ -1,2 +1,2 @@
 # Vibrio-GLMM
-Tools and examples for fitting serial dilution data to mixed models
+This folder contain annotated tools and examples for fitting serial dilution data to Bayesian mixed models

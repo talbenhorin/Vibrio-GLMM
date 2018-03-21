@@ -37,9 +37,9 @@ cat(
 m1.inits <- list(list("b0"=c(0.1,0,0.1,0,0.1,0,0.1),
                       "mu_logb0"=0,"tau_logb0"=0.1,"tau_all"=0.3,"b1"=0),
                  list("b0"=c(0,0.01,0,0.01,0,0.01,0),
-                      "mu_logb0"=0,"tau_logb0"=0.2,"tau_all"=0.1,"b1"=0),
+                      "mu_logb0"=0,"tau_logb0"=0.2,"tau_all"=0.1,"b1"=0.2),
                  list("b0"=c(0.1,0.01,0.1,0.01,0.1,0.01,0.1),
-                      "mu_logb0"=0,"tau_logb0"=0.3,"tau_all"=0.2,"b1"=0))
+                      "mu_logb0"=0,"tau_logb0"=0.3,"tau_all"=0.2,"b1"=0.1))
 
 # Parameters we ask JAGS to save
 parameters <- c("b1","mu_logb0","tau_logb0","tau_all","b1")

@@ -1,4 +1,3 @@
-setwd("~/R/MPNlognormal")
 rm(list=ls(all=TRUE))
 
 # Download JAGS at https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/

@@ -57,4 +57,10 @@ out<-MCMCpstr(m1,
               params = parameters,
               func = median,
               type = 'summary')
-write.csv(out,file = "output.csv", row.names = FALSE)
+out95<-hdi(list(m1$BUGSoutput$sims.list$lambda))
+
+# output file
+lower<-out95[[1]][1,]
+higher<-out95[[1]][2,]
+Iwant<-data.frame(out, lower, higher)
+write.csv(Iwant, file = "output.csv", row.names = FALSE)

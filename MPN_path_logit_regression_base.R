@@ -26,21 +26,20 @@ cat(
     for (i in 1:5320) {
       c[i] ~ dbin(p[i],3)
       p[i] <- 1-exp(-tlh[i]*rho[i]*v[i])
-      logit(rho[i]) <- b0 + U[samp[i]]
+      logit(rho[i]) <- U[samp[i]]
     }
     for (s in 1:996) {
       U[s] ~ dnorm(0,tau_U)
     }
     tau_U ~ dgamma(0.1,0.1)
-    b0 ~ dnorm(0,0.1)
   }",
   file="m1.jag"
 )
 
 # Initial params BOTH YEARS
-m1.inits <- list(list("U"=numeric(996),"tau_U"=1,"b0"=0.1),
-                 list("U"=numeric(996),"tau_U"=1,"b0"=0.1),
-                 list("U"=numeric(996),"tau_U"=1,"b0"=0.1))
+m1.inits <- list(list("U"=numeric(996),"tau_U"=0.1,"b0"=10),
+                 list("U"=numeric(996),"tau_U"=0.1,"b0"=10),
+                 list("U"=numeric(996),"tau_U"=0.1,"b0"=10))
 
 parameters <- c("U","b0")
 

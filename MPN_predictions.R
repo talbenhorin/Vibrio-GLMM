@@ -15,7 +15,7 @@ library(HDInterval)
 library(MCMCvis)
 
 dat <- read.csv("seagrantvibrio.csv", fill = FALSE, header = TRUE) 
-m1.dat<-list(c=dat$tlh,v=dat$mass,samp=dat$samp)
+m1.dat<-list(c=dat$path,v=dat$mass,samp=dat$samp)
 
 # Mixed-effects model
 # Only intercepts are random, but slopes are identical for all groups 

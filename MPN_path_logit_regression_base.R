@@ -15,7 +15,7 @@ library(HDInterval)
 library(MCMCvis)
 
 dat <- read.csv("seagrantvibrio.csv", fill = FALSE, header = TRUE) 
-m1.dat<-list(c=dat$path,v=dat$mass,samp=dat$samp,gear=dat$gear,tide=dat$t2,mod=dat$mod,hi=dat$hi,time=dat$time,tlh=dat$oysterMPN)
+m1.dat<-list(c=dat$path,v=dat$mass,samp=dat$samp,tlh=dat$oysterMPN)
 
 # Mixed-effects model
 # Only intercepts are random, but slopes are identical for all groups 
@@ -26,32 +26,23 @@ cat(
     for (i in 1:5320) {
       c[i] ~ dbin(p[i],3)
       p[i] <- 1-exp(-tlh[i]*rho[i]*v[i])
-      logit(rho[i]) <- b0 + b1*gear[i] + b2*tide[i] + b3*gear[i]*tide[i] + b4*mod[i] + b5*hi[i] + U[samp[i]] + V[time[i]]
+      logit(rho[i]) <- b0 + U[samp[i]]
     }
     for (s in 1:996) {
       U[s] ~ dnorm(0,tau_U)
     }
-    for (t in 1:20) {
-      V[t] ~ dnorm(0,tau_V)
-    }
     tau_U ~ dgamma(0.1,0.1)
-    tau_V ~ dgamma(0.1,0.1)
     b0 ~ dnorm(0,0.1)
-    b1 ~ dnorm(0,0.1)
-    b2 ~ dnorm(0,0.1)
-    b3 ~ dnorm(0,0.1)
-    b4 ~ dnorm(0,0.1)
-    b5 ~ dnorm(0,0.1)
   }",
   file="m1.jag"
 )
 
 # Initial params BOTH YEARS
-m1.inits <- list(list("U"=numeric(996),"V"=numeric(20),"tau_U"=1,"tau_V"=0.1,"b0"=0,"b1"=0,"b2"=0,"b3"=0,"b4"=0,"b5"=0),
-                 list("U"=numeric(996),"V"=numeric(20),"tau_U"=1,"tau_V"=0.1,"b0"=0,"b1"=0,"b2"=0,"b3"=0,"b4"=0,"b5"=0),
-                 list("U"=numeric(996),"V"=numeric(20),"tau_U"=1,"tau_V"=0.1,"b0"=0,"b1"=0,"b2"=0,"b3"=0,"b4"=0,"b5"=0))
+m1.inits <- list(list("U"=numeric(996),"tau_U"=1,"b0"=0.1),
+                 list("U"=numeric(996),"tau_U"=1,"b0"=0.1),
+                 list("U"=numeric(996),"tau_U"=1,"b0"=0.1))
 
-parameters <- c("U","V","b0","b1","b2","b3","b4","b5")
+parameters <- c("U","b0")
 
 m1 <- jags(data = m1.dat,
            inits = m1.inits,

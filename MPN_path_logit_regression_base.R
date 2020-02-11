@@ -15,7 +15,7 @@ library(HDInterval)
 library(MCMCvis)
 
 dat <- read.csv("seagrantvibrio.csv", fill = FALSE, header = TRUE) 
-m1.dat<-list(c=dat$path,v=dat$mass,samp=dat$samp,tlh=dat$oysterMPN)
+m1.dat<-list(c=dat$path,v=dat$mass,tlh=dat$oysterMPN)
 
 # Mixed-effects model
 # Only intercepts are random, but slopes are identical for all groups 
@@ -25,23 +25,20 @@ cat(
   "model{
     for (i in 1:5320) {
       c[i] ~ dbin(p[i],3)
-      p[i] <- 1-exp(-tlh[i]*rho[i]*v[i])
-      logit(rho[i]) <- U[samp[i]]
+      p[i] <- 1-exp(-tlh[i]*rho*v[i])
     }
-    for (s in 1:996) {
-      U[s] ~ dnorm(0,tau_U)
-    }
-    tau_U ~ dgamma(0.1,0.1)
+    logit(rho) <- b0
+    b0 ~ dnorm(0,0.1)
   }",
   file="m1.jag"
 )
 
 # Initial params BOTH YEARS
-m1.inits <- list(list("U"=numeric(996),"tau_U"=0.1,"b0"=10),
-                 list("U"=numeric(996),"tau_U"=0.1,"b0"=10),
-                 list("U"=numeric(996),"tau_U"=0.1,"b0"=10))
+m1.inits <- list(list("b0"=1),
+                 list("b0"=-1),
+                 list("b0"=0.5))
 
-parameters <- c("U","b0")
+parameters <- c("b0")
 
 m1 <- jags(data = m1.dat,
            inits = m1.inits,

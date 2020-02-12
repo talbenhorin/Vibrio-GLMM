@@ -25,20 +25,19 @@ cat(
   "model{
     for (i in 1:5320) {
       c[i] ~ dbin(p[i],3)
-      p[i] <- 1-exp(-tlh[i]*rho*v[i])
+      p[i] <- 1-exp(-tlh[i]*rho[i]*v[i])
+      rho[i] ~ dnorm(0,0.1)
     }
-    logit(rho) <- b0
-    b0 ~ dnorm(0,0.1)
   }",
   file="m1.jag"
 )
 
 # Initial params BOTH YEARS
-m1.inits <- list(list("b0"=1),
-                 list("b0"=-1),
-                 list("b0"=0.5))
+m1.inits <- list(list("rho"=0.1),
+                 list("rho"=0.5),
+                 list("rho"=0.6))
 
-parameters <- c("b0")
+parameters <- c("rho")
 
 m1 <- jags(data = m1.dat,
            inits = m1.inits,

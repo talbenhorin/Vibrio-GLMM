@@ -20,15 +20,17 @@ m1.dat<-list(c=dat$path,v=dat$mass,samp=dat$samp,gear=dat$gear,tide=dat$t2,mod=d
 # Mixed-effects model
 # Only intercepts are random, but slopes are identical for all groups 
 
-# Fitting MPN data to lognormal-binomial 
+# N-Mixture model for serial dilution data 
 cat(
   "model{
     for (i in 1:5320) {
+      # Observation model across serial dilutions
       c[i] ~ dbin(p[i],3)
       p[i] <- 1-exp(-lambda[i]*v[i])
+      
+      # Biological model for microbial abundance
       lambda[i] ~ dlnorm(mu[i],tau_all)
       mu[i] <- b0 + b1*gear[i] + b2*tide[i] + b3*gear[i]*tide[i] + b4*mod[i] + b5*hi[i] + U[samp[i]] + V[time[i]]
-      zlog.like[i] <- -log(sum(dbin(c[i],p[i],3)))
     }
     for (s in 1:996) {
       U[s] ~ dnorm(0,tau_U)
